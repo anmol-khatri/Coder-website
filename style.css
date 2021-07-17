@@ -121,7 +121,7 @@ nav .fas{
 .course{
 	width: 80%;
 	margin: auto;
-	text-align: center;
+	text-align: none;
 	padding-top: 100px;	
 }
 h1{
