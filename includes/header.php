@@ -26,7 +26,7 @@
           
           if (isset($_SESSION['user'])) {
             $loggeduser = $_SESSION['user'];
-            echo "<li><a href='../cart/cart.php'>$loggeduser</a></li>";
+            echo "<li><a href='../cart/coursehouse.php'>$loggeduser</a></li>";
             echo "<li><a href='../includes/logout.php'>LOGOUT</a></li>";
           }
           else{
