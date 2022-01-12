@@ -23,12 +23,57 @@ include "../includes/sub-banner.php";
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 </head>
 <body>
+
   
    <h1>Buy courses</h1>
-   <?php 
-   if (isset($_SESSION['user'])) {
-     // code...
-    echo "Welcome ".$_SESSION['user']." to the course page";
+   <form action="course.php" method="post">
+       <input type="text" name="txtSearch" value="<?php if(isset($_POST['btnSearch'])){
+        echo $_POST['txtSearch'];
+       } ?>">
+       <input type="submit" name="btnSearch" value="Search">
+   </form>
+   <?php
+   include '../includes/connection.php';
+   
+
+   if (isset($_SESSION['user'])) { 
+    $user=$_SESSION['user'];
+
+    if (isset($_POST['btnSearch'])) {
+        $search = $_POST['txtSearch'];
+       $sql = "select course_id,course_name, course_category_name, course_description from course inner join coursecategory on course.course_category_id= coursecategory.course_category_id where course_name like '$search%'";
+   }
+   else{
+
+    $sql = "select course_id,course_name, course_category_name, course_description from course inner join coursecategory on course.course_category_id= coursecategory.course_category_id";
+    // echo $sql;
+    
+    // echo $result;
+   }
+    $result = mysqli_query($connection, $sql);
+    echo "<table border = 1px solid black cellpadding = 10px>";
+      echo "<tr>";
+       echo "<th>Name</th>";
+       echo "<th>Category</th>";
+       echo "<th>Description</th>";
+       echo "<th>Get course</th>";
+      echo "</tr>";
+      if(mysqli_num_rows($result) > 0){
+          while($row = mysqli_fetch_assoc($result)){
+            $id=$row['course_id'];
+            echo "<tr>";
+            echo "<td>" . $row['course_name'] . "</td>";
+            echo "<td>" . $row["course_category_name"] . "</td>";
+            echo "<td>" . $row["course_description"] . "</td>";
+            echo "<td><a href='../cart/addtocoursehouse.php?id=$id&name=$user'>Add to Coursehouse</a></td>";
+            echo "</tr>";
+          }
+        }
+            
+        echo "</table>";
+        if(!mysqli_num_rows($result) > 0){
+            echo "<h1>Could not find the course</h1>";
+        }
 
    }
    else{
