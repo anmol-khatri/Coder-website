@@ -28,7 +28,7 @@ include "../includes/sub-banner.php";
    <?php 
    if (isset($_SESSION['user'])) {
      // code...
-    echo "Welcome to the course page";
+    echo "Welcome ".$_SESSION['user']." to the course page";
 
    }
    else{
