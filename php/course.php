@@ -45,7 +45,7 @@ include "../includes/sub-banner.php";
    }
    else{
 
-    $sql = "select course_id,course_name, course_category_name, course_description from course inner join coursecategory on course.course_category_id= coursecategory.course_category_id";
+    $sql = "select course.course_id,course_name, course_category_name, course_description from course inner join coursecategory on course.course_category_id= coursecategory.course_category_id";
     // echo $sql;
     
     // echo $result;
@@ -58,6 +58,9 @@ include "../includes/sub-banner.php";
        echo "<th>Description</th>";
        echo "<th>Get course</th>";
       echo "</tr>";
+      $checksql= "select course_id from usercourse";
+      $checkresult = mysqli_query($connection, $checksql);
+
       if(mysqli_num_rows($result) > 0){
           while($row = mysqli_fetch_assoc($result)){
             $id=$row['course_id'];
@@ -65,7 +68,14 @@ include "../includes/sub-banner.php";
             echo "<td>" . $row['course_name'] . "</td>";
             echo "<td>" . $row["course_category_name"] . "</td>";
             echo "<td>" . $row["course_description"] . "</td>";
-            echo "<td><a href='../cart/addtocoursehouse.php?id=$id&name=$user'>Add to Coursehouse</a></td>";
+            if (mysqli_fetch_assoc(mysqli_query($connection, "select * from usercourse where course_id = '$id'"))) {
+                 echo "<td>Added to Coursehouse</td>";
+            }
+            
+            else{
+                echo "<td><a href='../cart/addtocoursehouse.php?id=$id&name=$user'>Add to Coursehouse</a></td>";
+            }
+            
             echo "</tr>";
           }
         }
