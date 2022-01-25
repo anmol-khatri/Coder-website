@@ -31,7 +31,6 @@ include "../includes/sub-banner.php";
       <a href="course.html" class="hero-btn red-btn">EXPLORE NOW</a>
     </div> 
     <div class="about-col">
-      <img src="about.jpg">
     </div>
   </div>
 

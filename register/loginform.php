@@ -21,7 +21,7 @@ include "../includes/sub-banner.php";
 <tr>
 <td>Password</td>
 <td>:</td>
-<td><input name="txtPass" type="text" id="mypassword"></td>
+<td><input name="txtPass" type="password" id="mypassword"></td>
 </tr>
 <tr>
 <td>&nbsp;</td>
@@ -46,7 +46,6 @@ if (isset($_POST['btnSubmit'])) {
     $user = $_POST['txtUser'];
     $pass = $_POST['txtPass'];
     $query = "select * from user where user_name = '$user'";
-    echo $query;
 
     $result = mysqli_query($connection, $query);
 
@@ -58,6 +57,12 @@ if (isset($_POST['btnSubmit'])) {
             header ('location:../php/index.php');
             echo "logged in";
         }
+        else{
+        $_SESSION['error']= 'User not recognised';
+        // header ('location: loginform.php');
+        echo "Not logged in";
+
+    }
         
     }
     else{

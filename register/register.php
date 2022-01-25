@@ -7,24 +7,38 @@ include "../includes/sub-banner.php";
 	<label>Username</label>
 	<input type="text" name="txtUser" value="<?php
 	if(isset(($_POST['btnSubmit']))){
-		echo $_POST['txtUser'];
-	}
-	
-	?>"><br>
+		echo $_POST['txtUser'];}?>">
+		<?php if (isset($_POST['btnSubmit'])) {
+			if(empty($_POST['txtUser'])){
+		echo "<i>*Username must not be empty</i>";}
+	}?><br>
 	<label>Email</label>
 	<input type="text" name="txtEmail" value="<?php
 	if(isset(($_POST['btnSubmit']))){
 		echo $_POST['txtEmail'];
 	}
+
 	
-	?>"><br>
+	?>"><?php if (isset($_POST['btnSubmit'])) {
+
+			if(empty($_POST['txtEmail'])){
+		echo "<i>*Email must not be empty</i>";}
+		else{
+			if (!filter_var($email1, FILTER_VALIDATE_EMAIL)) {
+		echo "<i>*Invalid email address</i>";
+	}
+		}
+	}?><br>
 	<label>Password</label>
 	<input type="password" name="txtPass" value="<?php
 	if(isset(($_POST['btnSubmit']))){
 		echo $_POST['txtPass'];
 	}
 	
-	?>"><br>
+	?>"><?php if (isset($_POST['btnSubmit'])) {
+			if(empty($_POST['txtPass'])){
+		echo "<i>*Password field must not be empty</i>";}
+	}?><br>
 	<label>Age range</label>
 	<select name="txtAge" id="cars" >
 	  <option value="first" <?php if ($_POST['txtAge'] == 'first') echo 'selected="selected"'; ?>>0-18 years</option>
@@ -38,7 +52,10 @@ include "../includes/sub-banner.php";
   onclick="window.open('../register/termsconditions.php','popup','width=600,height=600'); return false;">
     Terms and conditions
 </a></label>
-	<input type="checkbox" name="txtAgree"><br>
+	<input type="checkbox" name="txtAgree"><?php if (isset($_POST['btnSubmit'])) {
+			if(empty($_POST['txtAgree'])){
+		echo "<i>*You must agree to Terms and Conditions.</i>";}
+	}?><br>
 	<input type="submit" name="btnSubmit" value="Register">
 </form>
 <?php 
@@ -47,9 +64,11 @@ if (isset($_POST['btnSubmit'])) {
 		if(!empty($_POST['txtEmail'])){
 		if(!empty($_POST['txtPass'])){
 		if(isset($_POST['txtAgree'])){
+			if (filter_var($email1, FILTER_VALIDATE_EMAIL)) {
 		include "connection.php";
 		$name = $_POST['txtUser'];
 		$password = $_POST['txtPass'];
+		$crypted = password_hash($password, PASSWORD_DEFAULT);
 		$email = $_POST['txtEmail'];
 		switch ($_POST['txtAge']) {
 			case 'first':
@@ -78,14 +97,16 @@ if (isset($_POST['btnSubmit'])) {
 				break;
 		}
 
-		$sql ="insert into user(user_name, user_password, lowage, highage, user_email) values('$name','$password', '$lowage', '$highage', '$email')";
-		echo $sql;
+		$sql ="insert into user(user_name, user_password, lowage, highage, user_email) values('$name','$crypted', '$lowage', '$highage', '$email')";
+		
 		if ($result = mysqli_query($connection, $sql)) {
+			header ('location:../register/loginform.php');
 			echo "added values";
 		}
 		else{
 			echo "not added";
 		}
+	}
 	}
 	}
 			
